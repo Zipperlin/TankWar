@@ -10,11 +10,14 @@ public class Tank {
     public static final int WIDTH=30;
     public static final int HEIGHT=30;
 
+    private boolean good;
+
     private TankClient tc;
 
-    public Tank(int x,int y,TankClient tc){
+    public Tank(int x,int y,TankClient tc,boolean bgood){
         this(x,y);
         this.tc=tc;
+        this.good = bgood;
     }
 
     private boolean bl=false,bu=false,br=false,bd=false;
@@ -41,7 +44,13 @@ public class Tank {
 
     public void draw(Graphics g){
         Color c=g.getColor();
-        g.setColor(Color.RED);
+
+        if(good){
+            g.setColor(Color.RED);
+        }
+        else {
+            g.setColor(Color.BLUE);
+        }
         g.fillOval(x,y,WIDTH,HEIGHT);
         g.setColor(c);
 
@@ -115,6 +124,11 @@ public class Tank {
         }
         if(this.dir!=Direction.STOP)
             this.ptdir=this.dir;
+
+        if(x<Tank.WIDTH) x=Tank.WIDTH;
+        if(y<Tank.HEIGHT) y=Tank.HEIGHT;
+        if(x+Tank.WIDTH>TankClient.GAME_WIDTH) x=TankClient.GAME_WIDTH-Tank.WIDTH;
+        if(y+Tank.HEIGHT>TankClient.GAME_HEIGHT) y=TankClient.GAME_HEIGHT-Tank.HEIGHT;
     }
 
     public void KeyPressed(KeyEvent e){
@@ -184,7 +198,7 @@ public class Tank {
     public Missile fire(){
         int x=this.x+ Tank.WIDTH/2-Missile.WIDTH/2;
         int y=this.y+Tank.HEIGHT/2-Missile.HEIGHT/2;
-        Missile m=new Missile(x,y,ptdir);
+        Missile m=new Missile(x,y,ptdir,tc);
         return m;
     }
 }

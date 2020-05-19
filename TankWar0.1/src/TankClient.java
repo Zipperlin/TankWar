@@ -10,9 +10,11 @@ public class TankClient extends Frame{
     public static final int GAME_WIDTH=800;
     public static final int GAME_HEIGHT=600;
 
+    Tank myTank=new Tank(50,50,this,true);
+
+    Tank enTank=new Tank(100,100,this,false);
 
 
-    Tank myTank=new Tank(50,50,this);
     Missile m=null;
 
     Vector<Missile> vecMissile=new Vector<Missile>();
@@ -43,6 +45,7 @@ public class TankClient extends Frame{
         }
 
         myTank.draw(g);
+        enTank.draw(g);
     }
 
     public void update(Graphics g){

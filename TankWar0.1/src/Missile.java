@@ -7,6 +7,7 @@ public class Missile {
     private int x;
     private int y;
     private Tank.Direction dir;
+    private  TankClient tc;
 
     private static  final int XSPEED=10;
     private static  final int YSPEED=10;
@@ -14,12 +15,21 @@ public class Missile {
     public static final int WIDTH=10;
     public static final int HEIGHT=10;
 
+    public boolean isLive() {
+        return live;
+    }
+
+    public void setLive(boolean live) {
+        this.live = live;
+    }
+
     private boolean live=true;
 
-    public Missile(int x, int y, Tank.Direction dir) {
+    public Missile(int x, int y, Tank.Direction dir,TankClient tc) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.tc=tc;
     }
 
     public void draw(Graphics g){
@@ -62,7 +72,13 @@ public class Missile {
                 y-=YSPEED;
                 break;
             default:
+                break;
                 //throw new IllegalStateException("Unexpected value: " + dir);
+        }
+
+        if(x<0|| y<0 ||x>TankClient.GAME_WIDTH||y>TankClient.GAME_WIDTH){
+            setLive(false);
+            tc.vecMissile.remove(this);
         }
     }
 

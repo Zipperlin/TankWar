@@ -3,6 +3,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Vector;
 
 public class TankClient extends Frame{
 
@@ -13,6 +14,8 @@ public class TankClient extends Frame{
 
     Tank myTank=new Tank(50,50,this);
     Missile m=null;
+
+    Vector<Missile> vecMissile=new Vector<Missile>();
 
     Image offScreenImage =null;
 
@@ -31,9 +34,14 @@ public class TankClient extends Frame{
     }
 
     public void paint(Graphics g){
-        if(m!=null) {
-            m.draw(g);
+
+        for(Missile var:vecMissile)
+        {
+            if(var!=null) {
+                var.draw(g);
+            }
         }
+
         myTank.draw(g);
     }
 

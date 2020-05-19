@@ -14,6 +14,8 @@ public class Missile {
     public static final int WIDTH=10;
     public static final int HEIGHT=10;
 
+    private boolean live=true;
+
     public Missile(int x, int y, Tank.Direction dir) {
         this.x = x;
         this.y = y;

@@ -45,6 +45,9 @@ public class Tank {
         g.fillOval(x,y,WIDTH,HEIGHT);
         g.setColor(c);
 
+        Integer icount=tc.vecMissile.size();
+        g.drawString(icount.toString(),60,60);
+
         switch (ptdir){
             case U:
                 g.drawLine(x+Tank.WIDTH/2,y+Tank.HEIGHT/2,x+Tank.WIDTH/2,y);
@@ -131,7 +134,8 @@ public class Tank {
                 bd=true;
                 break;
             case KeyEvent.VK_CONTROL:
-                tc.m=fire();
+                //tc.m=fire();
+                tc.vecMissile.add(fire());
                 break;
             default:
                 break;

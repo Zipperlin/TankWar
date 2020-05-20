@@ -40,6 +40,7 @@ public class TankClient extends Frame{
         for(Missile var:vecMissile)
         {
             if(var!=null) {
+                var.hittank(enTank);
                 var.draw(g);
             }
         }

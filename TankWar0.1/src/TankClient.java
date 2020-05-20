@@ -3,6 +3,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class TankClient extends Frame{
@@ -14,10 +15,15 @@ public class TankClient extends Frame{
 
     Tank enTank=new Tank(100,100,this,false);
 
+    ArrayList<Tank> listentank=new ArrayList<Tank>();
+
+    Explode e=new Explode(70,70,this);
 
     Missile m=null;
 
     Vector<Missile> vecMissile=new Vector<Missile>();
+
+    ArrayList<Explode> listexplode=new ArrayList<Explode>();
 
     Image offScreenImage =null;
 
@@ -40,13 +46,23 @@ public class TankClient extends Frame{
         for(Missile var:vecMissile)
         {
             if(var!=null) {
-                var.hittank(enTank);
+                var.hittanks(listentank);
                 var.draw(g);
             }
         }
 
+        for(int i=0;i<listexplode.size();i++){
+            listexplode.get(i).draw(g);
+        }
+
+        for(int i=0;i<listentank.size();i++){
+            Tank tank=listentank.get(i);
+            tank.draw(g);
+        }
         myTank.draw(g);
-        enTank.draw(g);
+
+
+
     }
 
     public void update(Graphics g){
@@ -63,6 +79,9 @@ public class TankClient extends Frame{
     }
 
     public void launchFrame(){
+        for(int i=0;i<10;i++){
+            listentank.add(new Tank(50+40*(i+1),50,this,false, Tank.Direction.D));
+        }
         this.setLocation(400,300);
         this.setSize(800,600);
         this.setTitle("TankWar");
@@ -77,6 +96,7 @@ public class TankClient extends Frame{
         setVisible(true);
         setResizable(false);
         setBackground(Color.green);
+
 
         new Thread(new PaintThread()).start();
     }

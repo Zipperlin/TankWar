@@ -2,6 +2,7 @@ import org.w3c.dom.events.Event;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class Missile {
     private int x;
@@ -95,9 +96,18 @@ public class Missile {
         if(this.getRect().intersects(tank.getRect())&& (tank.isLive())){
             tank.setLive(false);
             this.live=false;
-
+            Explode e=new Explode(x,y,tc);
+            tc.listexplode.add(e);
             return true;
         }
+        return false;
+    }
+
+    public boolean hittanks(ArrayList<Tank> list){
+       for(int i=0;i<list.size();i++){
+           if(hittank(list.get(i)))
+           return true;
+       }
         return false;
     }
 

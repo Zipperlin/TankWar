@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 public class Tank {
     private int x;
@@ -9,6 +10,9 @@ public class Tank {
 
     public static final int WIDTH=30;
     public static final int HEIGHT=30;
+
+
+    private static Random r=new Random();
 
     private boolean good;
 
@@ -24,10 +28,19 @@ public class Tank {
 
     private TankClient tc;
 
+    private int step=r.nextInt(12)+3;
+
     public Tank(int x,int y,TankClient tc,boolean bgood){
         this(x,y);
         this.tc=tc;
         this.good = bgood;
+    }
+
+    public Tank(int x,int y,TankClient tc,boolean bgood,Direction dir){
+        this(x,y);
+        this.tc=tc;
+        this.good = bgood;
+        this.dir=dir;
     }
 
     public Rectangle getRect(){
@@ -58,8 +71,13 @@ public class Tank {
 
     public void draw(Graphics g){
 
-        if(!live)
+        if(!live) {
+            if(!good){
+                tc.listentank.remove(this);
+            }
+
             return;
+        }
 
         Color c=g.getColor();
 
@@ -147,6 +165,17 @@ public class Tank {
         if(y<Tank.HEIGHT) y=Tank.HEIGHT;
         if(x+Tank.WIDTH>TankClient.GAME_WIDTH) x=TankClient.GAME_WIDTH-Tank.WIDTH;
         if(y+Tank.HEIGHT>TankClient.GAME_HEIGHT) y=TankClient.GAME_HEIGHT-Tank.HEIGHT;
+
+        if(!good){
+
+            Direction dir[] =Direction.values();
+            if(step==0){
+                step=r.nextInt(12)+3;
+                int rn=r.nextInt(dir.length);
+                this.dir=dir[rn];
+            }
+            step--;
+        }
     }
 
     public void KeyPressed(KeyEvent e){
@@ -220,4 +249,6 @@ public class Tank {
         //m.hittank(entank);
         return m;
     }
+
+
 }

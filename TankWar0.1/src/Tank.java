@@ -1,10 +1,15 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Tank {
     private int x;
     private int y;
+
+    private int oldx;
+    private int oldy;
+
     public static final int XSPEED=5;
     public static final int YSPEED=5;
 
@@ -13,6 +18,14 @@ public class Tank {
 
 
     private static Random r=new Random();
+
+    public boolean isGood() {
+        return good;
+    }
+
+    public void setGood(boolean good) {
+        this.good = good;
+    }
 
     private boolean good;
 
@@ -30,10 +43,23 @@ public class Tank {
 
     private int step=r.nextInt(12)+3;
 
+    public int getBlood() {
+        return blood;
+    }
+
+    public void setBlood(int blood) {
+        this.blood = blood;
+    }
+
+    private int blood=100;
+
     public Tank(int x,int y,TankClient tc,boolean bgood){
         this(x,y);
         this.tc=tc;
         this.good = bgood;
+
+        oldx=x;
+        oldy=y;
     }
 
     public Tank(int x,int y,TankClient tc,boolean bgood,Direction dir){
@@ -126,6 +152,9 @@ public class Tank {
     }
     
     void move(){
+        this.oldx=x;
+        this.oldy=y;
+
         switch (dir){
             case U:
                 y-=YSPEED;
@@ -174,8 +203,14 @@ public class Tank {
                 int rn=r.nextInt(dir.length);
                 this.dir=dir[rn];
             }
+
+
             step--;
+
+            if(r.nextInt(40)>38)
+            this.fire();
         }
+
     }
 
     public void KeyPressed(KeyEvent e){
@@ -197,6 +232,9 @@ public class Tank {
             case KeyEvent.VK_CONTROL:
                 //tc.m=fire();
                 tc.vecMissile.add(fire());
+                break;
+            case KeyEvent.VK_A:
+                superfire();
                 break;
             default:
                 break;
@@ -243,11 +281,67 @@ public class Tank {
     }
 
     public Missile fire(){
+        if(!live)
+            return null;
         int x=this.x+ Tank.WIDTH/2-Missile.WIDTH/2;
         int y=this.y+Tank.HEIGHT/2-Missile.HEIGHT/2;
-        Missile m=new Missile(x,y,ptdir,tc);
-        //m.hittank(entank);
+        Missile m=new Missile(x,y,this.good, ptdir,tc);
+
+        tc.vecMissile.add(m);
+
+
         return m;
+    }
+
+    public Missile fire(Direction dir){
+        if(!live)
+            return null;
+        int x=this.x+ Tank.WIDTH/2-Missile.WIDTH/2;
+        int y=this.y+Tank.HEIGHT/2-Missile.HEIGHT/2;
+        Missile m=new Missile(x,y,this.good, ptdir,tc);
+
+        tc.vecMissile.add(m);
+
+
+        return m;
+    }
+
+    public void superfire(){
+        //超级炮弹还有问题
+        Direction[] dir=Direction.values();
+        for(int i=0;i<8;i++) {
+            fire(dir[i]);
+        }
+    }
+
+    public boolean collidesWithTank(ArrayList<Tank> tanks){
+
+        for(Tank var : tanks){
+            if(this!=var){
+                if(this.live&& this.getRect().intersects(var.getRect())){
+
+                    this.stay();
+                    return false;
+                }
+            }
+
+        }
+
+        return true;
+    }
+
+    public boolean collidesWithWall(Wall w){
+        if(this.live&& this.getRect().intersects(w.getRect())){
+            this.dir=Direction.STOP;
+            this.stay();
+            return false;
+        }
+        return true;
+    }
+
+    private void stay(){
+        this.x=oldx;
+        this.y=oldy;
     }
 
 

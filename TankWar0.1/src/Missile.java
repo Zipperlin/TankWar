@@ -16,6 +16,8 @@ public class Missile {
     public static final int WIDTH=10;
     public static final int HEIGHT=10;
 
+    private boolean good;
+
     public boolean isLive() {
         return live;
     }
@@ -26,11 +28,12 @@ public class Missile {
 
     private boolean live=true;
 
-    public Missile(int x, int y, Tank.Direction dir,TankClient tc) {
+    public Missile(int x, int y, boolean isgood,Tank.Direction dir,TankClient tc) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.tc=tc;
+        this.good=isgood;
     }
 
     public void draw(Graphics g){
@@ -93,11 +96,24 @@ public class Missile {
     }
 
     public boolean hittank(Tank tank){
-        if(this.getRect().intersects(tank.getRect())&& (tank.isLive())){
-            tank.setLive(false);
+        if(this.getRect().intersects(tank.getRect())&& (tank.isLive()) && (this.good!=tank.isGood())){
+
+
+            if(tank.isGood()){
+                tank.setBlood(tank.getBlood()-20);
+                if(tank.getBlood()<=0){
+                    tank.setLive(false);
+                }
+            }
+            else{
+                tank.setLive(false);
+            }
+
+
             this.live=false;
             Explode e=new Explode(x,y,tc);
             tc.listexplode.add(e);
+
             return true;
         }
         return false;
@@ -111,5 +127,12 @@ public class Missile {
         return false;
     }
 
+    public boolean hitwall(Wall w){
+        if(this.live&& this.getRect().intersects(w.getRect())){
+            this.live=false;
+            return false;
+        }
+        return true;
+    }
 
 }

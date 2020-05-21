@@ -15,6 +15,9 @@ public class TankClient extends Frame{
 
     Tank enTank=new Tank(100,100,this,false);
 
+    Wall W1=new Wall(300,200,20,150,this);
+    Wall W2=new Wall(300,100,300,20,this);
+
     ArrayList<Tank> listentank=new ArrayList<Tank>();
 
     Explode e=new Explode(70,70,this);
@@ -47,6 +50,9 @@ public class TankClient extends Frame{
         {
             if(var!=null) {
                 var.hittanks(listentank);
+                var.hittank(myTank);
+                var.hitwall(W1);
+                var.hitwall(W2);
                 var.draw(g);
             }
         }
@@ -57,11 +63,14 @@ public class TankClient extends Frame{
 
         for(int i=0;i<listentank.size();i++){
             Tank tank=listentank.get(i);
+            tank.collidesWithWall(W1);
+            tank.collidesWithWall(W2);
+            tank.collidesWithTank(listentank);
             tank.draw(g);
         }
         myTank.draw(g);
-
-
+        W1.draw(g);
+        W2.draw(g);
 
     }
 
@@ -79,6 +88,7 @@ public class TankClient extends Frame{
     }
 
     public void launchFrame(){
+
         for(int i=0;i<10;i++){
             listentank.add(new Tank(50+40*(i+1),50,this,false, Tank.Direction.D));
         }

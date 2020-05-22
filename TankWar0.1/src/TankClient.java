@@ -18,6 +18,8 @@ public class TankClient extends Frame{
     Wall W1=new Wall(300,200,20,150,this);
     Wall W2=new Wall(300,100,300,20,this);
 
+    Blood blood=new Blood(350,350,10,10,this);
+
     ArrayList<Tank> listentank=new ArrayList<Tank>();
 
     Explode e=new Explode(70,70,this);
@@ -71,6 +73,8 @@ public class TankClient extends Frame{
         myTank.draw(g);
         W1.draw(g);
         W2.draw(g);
+
+        blood.draw(g);
 
     }
 

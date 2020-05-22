@@ -236,6 +236,11 @@ public class Tank {
             case KeyEvent.VK_A:
                 superfire();
                 break;
+            case KeyEvent.VK_F2:
+                if(!this.live){
+                    this.live=true;
+                }
+                break;
             default:
                 break;
         }

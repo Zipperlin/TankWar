@@ -48,6 +48,12 @@ public class TankClient extends Frame{
 
     public void paint(Graphics g){
 
+        if(listentank.size()<=0){
+            for(int i=0;i<5;i++){
+                listentank.add(new Tank(50+40*(i+1),50,this,false, Tank.Direction.D));
+            }
+        }
+
         for(Missile var:vecMissile)
         {
             if(var!=null) {
